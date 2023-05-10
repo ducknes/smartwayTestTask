@@ -10,13 +10,11 @@ import (
 )
 
 type repository struct {
-	client Client
+	database Client
 }
 
-func (repo *repository) Create(ctx context.Context, airline models.Airline) error {
-	query := `INSERT INTO airline (iata, name) VALUES ($1, $2) RETURNING iata`
-
-	if err := repo.client.QueryRow(ctx, query, airline.Iata, airline.Name).Scan(&airline.Iata); err != nil {
+func (repo *repository) CreateAirline(airline *models.Airline) error {
+	if _, err := repo.database.Exec(context.Background(), InsertAirline, airline.Iata, airline.Name); err != nil {
 		if pgErr, ok := err.(*pgconn.PgError); ok {
 			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s", pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
 			log.Println(newErr)
@@ -27,22 +25,42 @@ func (repo *repository) Create(ctx context.Context, airline models.Airline) erro
 	return nil
 }
 
-//func (repo *repository) FindAll(ctx context.Context) (user []any, err error) {
-//
-//}
-//
-//func (repo *repository) FindOne(ctx context.Context, id string) (any, error) {
-//
-//}
-//
-//func (repo *repository) Update(ctx context.Context, user any) error {
-//
-//}
-//
-//func (repo *repository) Delete(ctx context.Context, id string) error {
-//
-//}
+func (repo *repository) CreateProvider(provider *models.Provider) error {
+	if _, err := repo.database.Exec(context.Background(), InsertProvider, provider.ProdviderId, provider.Name); err != nil {
+		if pgErr, ok := err.(*pgconn.PgError); ok {
+			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s", pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
+			log.Println(newErr)
+			return newErr
+		}
+		return err
+	}
+	return nil
+}
+
+func (repo *repository) CreateSchema(schema *models.Schema) error {
+	if _, err := repo.database.Exec(context.Background(), InsertSchema, schema.Name); err != nil {
+		if pgErr, ok := err.(*pgconn.PgError); ok {
+			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s", pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
+			log.Println(newErr)
+			return newErr
+		}
+		return err
+	}
+	return nil
+}
+
+func (repo *repository) CreateAccount(account *models.Account) error {
+	if _, err := repo.database.Exec(context.Background(), InsertAccount, account.SchemaId, account.Name); err != nil {
+		if pgErr, ok := err.(*pgconn.PgError); ok {
+			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s", pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
+			log.Println(newErr)
+			return newErr
+		}
+		return err
+	}
+	return nil
+}
 
 func NewRepository(client Client) Storage {
-	return &repository{client: client}
+	return &repository{database: client}
 }

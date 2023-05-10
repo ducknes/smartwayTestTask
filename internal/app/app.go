@@ -16,23 +16,8 @@ import (
 )
 
 func Start() {
-	if err := godotenv.Load(".env"); err != nil {
-		log.Println("env")
-	}
-
-	router := mux.NewRouter()
-
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		if _, err := w.Write([]byte("hello User")); err != nil {
-			log.Println("fail write")
-		}
-		log.Println("handle success")
-	})
-
-	server := &http.Server{
-		Addr:    ":8080",
-		Handler: router,
+	if err := godotenv.Load("/Users/ilyaantonov/Downloads/ВАЖНОЕ/smartwayTestTask/.env"); err != nil {
+		panic(err)
 	}
 
 	cfg := config.NewStorageConfig()
@@ -42,9 +27,20 @@ func Start() {
 		panic(errPSQL)
 	}
 
+	router := mux.NewRouter()
+
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("hello User"))
+	})
+
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: router,
+	}
+
 	repos := database.NewRepository(postgreSQLClient)
-	services := service.NewService(&repos)
-	handlers := handler.NewHandler(&services)
+	services := service.NewService(repos)
+	handlers := handler.NewHandler(services)
 	handlers.Register(router)
 
 	go func() {
