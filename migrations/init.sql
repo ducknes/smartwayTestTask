@@ -37,8 +37,8 @@ CREATE TABLE schema_provider(
 	provider_id int not null, 
 	schema_id int not null, 
 
-    foreign key (provider_id) references public.provider(id),
-   	foreign key (schema_id) references public."schema"(id)
+    foreign key (provider_id) references public.provider(id) on delete cascade,
+   	foreign key (schema_id) references public."schema"(id) on delete cascade
 );
 
 create table airline_provider(
@@ -46,8 +46,8 @@ create table airline_provider(
 	airline_id int not null,
 	provider_id int not null,
 	
-	foreign key (airline_id) references public.airline(id),
-	foreign key (provider_id) references public.provider(id)
+	foreign key (airline_id) references public.airline(id) on delete cascade,
+	foreign key (provider_id) references public.provider(id) on delete cascade
 );
 
 -- insert into public.airline (iata, name) values ('SU','Аэрофлот');

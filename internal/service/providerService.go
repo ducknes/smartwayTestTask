@@ -19,6 +19,11 @@ func (s *service) AddProvider(rawData io.Reader) (err error) {
 	return
 }
 
-func (s *service) DeleteProviderById(id string) {}
+func (s *service) DeleteProviderById(id string) (err error) {
+	if err = s.repository.DeleteProvider(id); err != nil {
+		return
+	}
+	return
+}
 
 func (s *service) GetAirlinesByProviderId(providerId int) {}

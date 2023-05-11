@@ -19,6 +19,11 @@ func (s *service) AddAirline(rawData io.Reader) (err error) {
 	return
 }
 
-func (s *service) DeleteAirlineByCode(iata string) {}
+func (s *service) DeleteAirlineByCode(iata string) (err error) {
+	if err = s.repository.DeleteAirline(iata); err != nil {
+		return
+	}
+	return
+}
 
 func (s *service) UpdateProvidersList(iata string, providers []string) {}

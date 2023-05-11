@@ -61,6 +61,54 @@ func (repo *repository) CreateAccount(account *models.Account) error {
 	return nil
 }
 
+func (repo *repository) DeleteAirline(iata string) error {
+	if _, err := repo.database.Exec(context.Background(), DeleteAirline, iata); err != nil {
+		if pgErr, ok := err.(*pgconn.PgError); ok {
+			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s", pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
+			log.Println(newErr)
+			return newErr
+		}
+		return err
+	}
+	return nil
+}
+
+func (repo *repository) DeleteProvider(provider_id string) error {
+	if _, err := repo.database.Exec(context.Background(), DeleteProvider, provider_id); err != nil {
+		if pgErr, ok := err.(*pgconn.PgError); ok {
+			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s", pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
+			log.Println(newErr)
+			return newErr
+		}
+		return err
+	}
+	return nil
+}
+
+func (repo *repository) DeleteSchema(id uint64) error {
+	if _, err := repo.database.Exec(context.Background(), DeleteSchema, id); err != nil {
+		if pgErr, ok := err.(*pgconn.PgError); ok {
+			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s", pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
+			log.Println(newErr)
+			return newErr
+		}
+		return err
+	}
+	return nil
+}
+
+func (repo *repository) DeleteAccount(id uint64) error {
+	if _, err := repo.database.Exec(context.Background(), DeleteAccount, id); err != nil {
+		if pgErr, ok := err.(*pgconn.PgError); ok {
+			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s", pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
+			log.Println(newErr)
+			return newErr
+		}
+		return err
+	}
+	return nil
+}
+
 func NewRepository(client Client) Storage {
 	return &repository{database: client}
 }

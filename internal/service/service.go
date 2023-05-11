@@ -7,17 +7,17 @@ import (
 
 type Service interface {
 	AddAirline(rawData io.Reader) error
-	DeleteAirlineByCode(iata string)
+	DeleteAirlineByCode(iata string) error
 	AddProvider(rawData io.Reader) error
-	DeleteProviderById(id string)
+	DeleteProviderById(id string) error
 	UpdateProvidersList(iata string, providers []string)
 	AddSchema(rawData io.Reader) error
 	FindSchemaByName(name string)
 	UpdateSchema(fields ...interface{})
-	SaveDeleteSchema(id int)
+	SaveDeleteSchema(id string) error
 	AddAccount(rawData io.Reader) error
 	UptateAccountSchema(accountID int, schemaId int)
-	DeleteAccountById(id int)
+	DeleteAccountById(id string) error
 	GetAirlinesByAccountId(accountId int)
 	GetAirlinesByProviderId(providerId int)
 }
