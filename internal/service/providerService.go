@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/json"
 	"io"
 	"smartwayTestTAsk/internal/models"
 	"smartwayTestTAsk/pkg/tools"
@@ -26,4 +27,25 @@ func (s *service) DeleteProviderById(id string) (err error) {
 	return
 }
 
-func (s *service) GetAirlinesByProviderId(providerId int) {}
+func (s *service) GetAirlinesByProviderId(id string) ([]byte, error) {
+	airlineProviders, err := s.repository.GetProviderAirlines(id)
+	if err != nil {
+		return nil, err
+	}
+
+	response := make(map[string][]string, 1)
+	airlines := make([]string, 0)
+
+	for _, values := range airlineProviders {
+		airlines = append(airlines, values.AirlineId)
+	}
+
+	response[id] = airlines
+
+	jsonB, err := json.Marshal(response)
+	if err != nil {
+		return nil, err
+	}
+
+	return jsonB, nil
+}

@@ -10,16 +10,16 @@ type Service interface {
 	DeleteAirlineByCode(iata string) error
 	AddProvider(rawData io.Reader) error
 	DeleteProviderById(id string) error
-	UpdateProvidersList(iata string, providers []string)
+	UpdateProvidersList(data map[string]string) error
 	AddSchema(rawData io.Reader) error
-	FindSchemaByName(name string)
-	UpdateSchema(fields ...interface{})
+	FindSchemaByName(name string) ([]byte, error)
+	UpdateSchema(rawData io.Reader, id string) error
 	SaveDeleteSchema(id string) error
 	AddAccount(rawData io.Reader) error
-	UptateAccountSchema(accountID int, schemaId int)
+	UptateAccountSchema(data map[string]string) error
 	DeleteAccountById(id string) error
-	GetAirlinesByAccountId(accountId int)
-	GetAirlinesByProviderId(providerId int)
+	GetAirlinesByAccountId(id string) ([]byte, error)
+	GetAirlinesByProviderId(id string) ([]byte, error)
 }
 
 type service struct {

@@ -17,9 +17,26 @@ func (h *handler) AddSchema(w http.ResponseWriter, r *http.Request) {
 	log.Println("new schema created")
 }
 
-func (h *handler) FindSchemaByName(w http.ResponseWriter, r *http.Request) {}
+func (h *handler) FindSchemaByName(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	response, err := h.service.FindSchemaByName(vars["name"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
+}
 
-func (h *handler) UpdateSchema(w http.ResponseWriter, r *http.Request) {}
+func (h *handler) UpdateSchema(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	if err := h.service.UpdateSchema(r.Body, vars["id"]); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Success update schema"))
+}
 
 func (h *handler) SaveDeleteSchema(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

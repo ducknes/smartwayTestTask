@@ -29,4 +29,13 @@ func (h *handler) DeleteProviderById(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("Success delete provider with id = %s", vars["provider_id"])))
 }
 
-func (h *handler) GetAirlinesByProviderId(w http.ResponseWriter, r *http.Request) {}
+func (h *handler) GetAirlinesByProviderId(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	response, err := h.service.GetAirlinesByProviderId(vars["providerId"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
+}

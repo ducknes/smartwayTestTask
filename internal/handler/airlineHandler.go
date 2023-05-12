@@ -29,4 +29,12 @@ func (h *handler) DeleteAirlineByCode(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("Success delete airline with iata = %s", vars["iata"])))
 }
 
-func (h *handler) UpdateProvidersList(w http.ResponseWriter, r *http.Request) {}
+func (h *handler) UpdateProvidersList(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	if errUpdate := h.service.UpdateProvidersList(vars); errUpdate != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(errUpdate.Error()))
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Success update providers list"))
+}

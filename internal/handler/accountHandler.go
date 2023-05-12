@@ -17,7 +17,15 @@ func (h *handler) AddAccount(w http.ResponseWriter, r *http.Request) {
 	log.Println("new account created")
 }
 
-func (h *handler) UptateAccountSchema(w http.ResponseWriter, r *http.Request) {}
+func (h *handler) UptateAccountSchema(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	if err := h.service.UptateAccountSchema(vars); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Success update account schema"))
+}
 
 func (h *handler) DeleteAccountById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -29,4 +37,13 @@ func (h *handler) DeleteAccountById(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("Success delete account with id %s", vars["id"])))
 }
 
-func (h *handler) GetAirlinesByAccountId(w http.ResponseWriter, r *http.Request) {}
+func (h *handler) GetAirlinesByAccountId(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	response, err := h.service.GetAirlinesByAccountId(vars["accountId"])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
+}
