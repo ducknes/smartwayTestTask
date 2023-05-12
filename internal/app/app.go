@@ -12,14 +12,9 @@ import (
 	"smartwayTestTAsk/internal/service"
 
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
 )
 
 func Start() {
-	if err := godotenv.Load("/Users/ilyaantonov/Downloads/ВАЖНОЕ/smartwayTestTask/.env"); err != nil {
-		panic(err)
-	}
-
 	cfg := config.NewStorageConfig()
 
 	postgreSQLClient, errPSQL := database.NewClient(context.TODO(), cfg)

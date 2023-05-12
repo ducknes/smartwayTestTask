@@ -1,9 +1,5 @@
 package config
 
-import (
-	"os"
-)
-
 type StorageConfig struct {
 	Host        string
 	Port        string
@@ -15,11 +11,11 @@ type StorageConfig struct {
 
 func NewStorageConfig() StorageConfig {
 	return StorageConfig{
-		Host:        os.Getenv("DBHOST"),
+		Host:        DBHOST,
 		Port:        "5432",
-		Username:    os.Getenv("DBUSERNAME"),
-		Password:    os.Getenv("DBPASSWORD"),
-		Database:    os.Getenv("DBNAME"),
+		Username:    DBUSERNAME,
+		Password:    DBPASSWORD,
+		Database:    DBNAME,
 		MaxAttempts: 5,
 	}
 }
