@@ -1,9 +1,9 @@
 package config
 
 const (
-	DBHOST     = "localhost"
-	DBUSERNAME = "ilyaantonov"
-	DBPASSWORD = "Ilya2003"
+	DBHOST     = "host.docker.internal"
+	DBUSERNAME = "postgres"
+	DBPASSWORD = "postgres"
 	DBNAME     = "smartwaytesttask"
-	MIGRPATH   = "/Users/ilyaantonov/Downloads/ВАЖНОЕ/smartwayTestTask/migrations"
+	MIGRPATH   = "./migrations"
 )
